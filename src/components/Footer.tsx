@@ -1,0 +1,150 @@
+// root/Footer.tsx
+"use client";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Facebook, Twitter, Linkedin, ChevronDown } from "lucide-react";
+import { usePathname } from 'next/navigation';
+
+interface FooterProps {
+    forceLightVersion?: boolean;
+}
+
+const Footer: React.FC<FooterProps> = ({ forceLightVersion }) => {
+    const [language, setLanguage] = useState('EN');
+    const pathname = usePathname();
+    
+    // Check if we're on a course page
+    const isCoursePage = pathname?.includes('/courses/') || forceLightVersion;
+
+    const languages = [
+        { code: 'EN', label: 'English' },
+        { code: 'ES', label: 'Español' },
+        { code: 'FR', label: 'Français' },
+        { code: 'DE', label: 'Deutsch' }
+    ];
+
+    const handleLanguageChange = (langCode: string) => {
+        setLanguage(langCode);
+    };
+
+    // Common footer bottom section
+    const FooterBottom = () => (
+        <div className={`${isCoursePage ? '' : 'border-t-2'} border-gray-200 mt-${isCoursePage ? '0' : '12'} pt-4 flex flex-col sm:flex-row justify-between items-center text-gray-600 text-sm gap-4`}>
+            <div className=" flex items-center space-x-3">
+                <Link
+                    href="https://facebook.com"
+                    className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all duration-300"
+                >
+                    <Facebook size={16} fill="currentColor" strokeWidth={0} />
+                </Link>
+                <Link
+                    href="https://twitter.com"
+                    className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all duration-300"
+                >
+                    <Twitter size={16} fill="currentColor" strokeWidth={0} />
+                </Link>
+                <Link
+                    href="https://linkedin.com"
+                    className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all duration-300"
+                >
+                    <Linkedin size={16} fill="currentColor" strokeWidth={0} />
+                </Link>
+                <Link
+                    href="https://youtube.com"
+                    className="w-7 h-7 sm:w-8 sm:h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-blue-500 hover:text-white transition-all duration-300"
+                >
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                    >
+                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                    </svg>
+                </Link>
+            </div>
+
+            <p className="text-center order-3 sm:order-2">
+                &copy; {new Date().getFullYear()} code2career. All rights reserved.
+            </p>
+
+            <div className="relative group order-2 sm:order-3">
+                <button className="flex items-center space-x-1 text-gray-600 hover:text-blue-500 transition-colors border border-gray-200 rounded-full px-2 py-1 text-xs sm:text-sm">
+                    <span>{language}</span>
+                    <ChevronDown size={12} />
+                </button>
+                <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block bg-white shadow-lg rounded-md py-1 min-w-[80px] text-sm z-50">
+                    {languages.map((lang) => (
+                        <button
+                            key={lang.code}
+                            onClick={() => handleLanguageChange(lang.code)}
+                            className="block w-full text-left px-3 py-1 text-gray-700 hover:bg-gray-100 min-w-[100px]"
+                        >
+                            {lang.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+
+    return (
+        <footer className={`bg-white border-t ${isCoursePage ? 'pt-0' : 'pt-12'} pb-4 w-full`}>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {!isCoursePage && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="col-span-1">
+                            <div className="flex items-center space-x-2 mb-4">
+                                <Image
+                                    src="/logo.svg"
+                                    alt="Logo"
+                                    width={200}
+                                    height={80}
+                                />
+                            </div>
+                            <p className="text-gray-600 text-sm">
+                                Empowering the next generation of tech professionals through quality education
+                                and mentorship.
+                            </p>
+                        </div>
+                        
+                        <div className="col-span-1">
+                            <h4 className="text-[#010F1C] font-semibold mb-4">Quick Links</h4>
+                            <ul className="space-y-2 text-gray-600 text-sm">
+                                <li><Link href="/" className="hover:text-blue-500">Home</Link></li>
+                                <li><Link href="/about" className="hover:text-blue-500">About Us</Link></li>
+                                <li><Link href="/courses" className="hover:text-blue-500">Courses</Link></li>
+                                <li><Link href="/contact" className="hover:text-blue-500">Contact</Link></li>
+                            </ul>
+                        </div>
+                        
+                        <div className="col-span-1">
+                            <h4 className="text-[#010F1C] font-semibold mb-4">Support</h4>
+                            <ul className="space-y-2 text-gray-600 text-sm">
+                                <li><Link href="/" className="hover:text-blue-500">Help Center</Link></li>
+                                <li><Link href="/TOS" className="hover:text-blue-500">Terms of Service</Link></li>
+                                <li><Link href="/privacy" className="hover:text-blue-500">Privacy Policy</Link></li>
+                                <li><Link href="#" className="hover:text-blue-500">FAQ</Link></li>
+                            </ul>
+                        </div>
+                        
+                        <div className="col-span-1">
+                            <h4 className="text-[#010F1C] font-semibold mb-4">Contact Us</h4>
+                            <address className="text-gray-600 text-sm not-italic">
+                                Email: hello@code2career.com<br />
+                                Phone: +1 (555) 123-4567<br />
+                                Address: 123 Tech Street<br />
+                                San Francisco, CA 94105
+                            </address>
+                        </div>
+                    </div>
+                )}
+                
+                <FooterBottom />
+            </div>
+        </footer>
+    );
+};
+
+export default Footer;

@@ -1,0 +1,124 @@
+# Computer Science Learning Platform Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx                    # Root layout
+│   ├── page.tsx                      # Home page with CS roadmap
+│   │
+│   ├── fundamentals/                 # CS Fundamentals
+│   │   ├── page.tsx                  # Overview of CS basics
+│   │   ├── binary/                   # Binary & Number Systems
+│   │   ├── boolean-logic/            # Boolean Logic & Gates
+│   │   └── memory/                   # Memory & Data Storage
+│   │
+│   ├── data-structures/              # Data Structures
+│   │   ├── page.tsx                  # DS Overview
+│   │   ├── arrays/                   # Arrays & Lists
+│   │   ├── linked-lists/             # Linked Lists
+│   │   ├── stacks/                   # Stacks
+│   │   ├── queues/                   # Queues
+│   │   ├── trees/                    # Trees
+│   │   ├── graphs/                   # Graphs
+│   │   └── hash-tables/              # Hash Tables
+│   │
+│   ├── algorithms/                   # Algorithms
+│   │   ├── page.tsx                  # Algorithms Overview
+│   │   ├── sorting/                  # Sorting Algorithms
+│   │   │   ├── bubble-sort/
+│   │   │   ├── quick-sort/
+│   │   │   └── merge-sort/
+│   │   ├── searching/                # Searching Algorithms
+│   │   │   ├── linear-search/
+│   │   │   └── binary-search/
+│   │   └── recursion/                # Recursion Concepts
+│   │
+│   ├── programming-concepts/         # Programming Concepts
+│   │   ├── page.tsx                  # Concepts Overview
+│   │   ├── variables/                # Variables & Types
+│   │   ├── control-flow/            # Control Flow
+│   │   ├── functions/               # Functions
+│   │   ├── loops/                   # Loops
+│   │   └── oop/                     # Object-Oriented Programming
+│   │
+│   ├── complexity/                   # Time & Space Complexity
+│   │   ├── page.tsx                  # Big O Notation Overview
+│   │   ├── time-complexity/          # Time Complexity Analysis
+│   │   └── space-complexity/         # Space Complexity Analysis
+│   │
+│   └── exercises/                    # Practice Exercises
+       ├── page.tsx                   # Exercise Overview
+       ├── array-exercises/           # Array Problems
+       ├── recursion-exercises/       # Recursion Problems
+       └── algorithm-exercises/       # Algorithm Problems
+
+└── components/                       # Shared Components
+    ├── visualizers/                  # Algorithm Visualizers
+    │   ├── ArrayVisualizer.tsx
+    │   ├── TreeVisualizer.tsx
+    │   └── SortingVisualizer.tsx
+    ├── code-examples/                # Code Example Components
+    │   ├── CodeBlock.tsx
+    │   └── CodeRunner.tsx
+    └── interactive/                  # Interactive Learning Components
+        ├── BinaryConverter.tsx
+        ├── LogicGateSimulator.tsx
+        └── ComplexityCalculator.tsx
+```
+
+## Key Learning Areas
+
+1. **CS Fundamentals**
+   - Binary and Number Systems
+   - Boolean Logic and Gates
+   - Memory and Data Storage
+   - Computer Architecture Basics
+
+2. **Data Structures**
+   - Arrays and Lists
+   - Linked Lists
+   - Stacks and Queues
+   - Trees and Graphs
+   - Hash Tables
+
+3. **Algorithms**
+   - Sorting Algorithms
+   - Searching Algorithms
+   - Recursion
+   - Algorithm Analysis
+
+4. **Programming Concepts**
+   - Variables and Data Types
+   - Control Flow
+   - Functions and Methods
+   - Loops and Iteration
+   - Object-Oriented Programming
+
+5. **Complexity Analysis**
+   - Big O Notation
+   - Time Complexity
+   - Space Complexity
+   - Algorithm Efficiency
+
+6. **Practice Exercises**
+   - Data Structure Problems
+   - Algorithm Challenges
+   - Recursion Exercises
+   - Complexity Analysis Practice
+
+## Interactive Features
+
+- Algorithm Visualizers
+- Code Execution Environment
+- Interactive Exercises
+- Visual Demonstrations
+- Practice Problems
+
+## Learning Path
+
+1. Start with CS Fundamentals to understand basic concepts
+2. Progress to Programming Concepts for coding basics
+3. Learn Data Structures and their implementations
+4. Study Algorithms and their applications
+5. Master Complexity Analysis
+6. Practice with hands-on exercises

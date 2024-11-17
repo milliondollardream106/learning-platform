@@ -1,0 +1,223 @@
+// SRC/app/courses/page.tsx
+
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+
+// Types
+type CourseTab = {
+  key: string;
+  label: string;
+};
+
+interface Course {
+  code: string;
+  title: string;
+  description: string;
+  isFree?: boolean;
+  image?: string;
+  duration?: string;
+  level?: 'Beginner' | 'Intermediate' | 'Advanced';
+}
+
+interface CourseSections {
+  [key: string]: Course[];
+}
+
+// Components
+interface CourseCardProps extends Course {
+  className?: string;
+}
+
+const CourseCard: React.FC<CourseCardProps> = ({
+  code,
+  title,
+  description,
+  isFree = true,
+  level = 'Beginner',
+  duration = '8 weeks',
+  className = '',
+}) => (
+  <div className={`bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 ${className}`}>
+    <div className="relative">
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 h-48 relative overflow-hidden">
+        {/* Decorative pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-white transform rotate-45 translate-y-1/2" />
+        </div>
+      </div>
+      {isFree && (
+        <div className="absolute top-4 right-4">
+          <span className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-medium shadow-lg">
+            Free
+          </span>
+        </div>
+      )}
+    </div>
+    
+    <div className="p-6">
+      <div className="flex items-center gap-3 mb-3">
+        <span className="text-blue-600 font-semibold">{code}</span>
+        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+          level === 'Beginner' ? 'bg-blue-100 text-blue-700' :
+          level === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
+          'bg-red-100 text-red-700'
+        }`}>
+          {level}
+        </span>
+      </div>
+      
+      <h3 className="text-xl font-semibold mb-2 text-gray-900">{title}</h3>
+      <p className="text-gray-600 mb-4">{description}</p>
+      
+      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <span className="text-sm text-gray-500">
+          Duration: {duration}
+        </span>
+        <button className="group text-black opacity-50 hover:text-[#FFB21D] font-bold text-sm transition-all duration-300 flex items-center">
+          Learn more
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={3}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+interface CourseSectionProps {
+  courses: Course[];
+}
+
+const CourseSection: React.FC<CourseSectionProps> = ({ courses }) => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {courses.map((course, index) => (
+      <CourseCard key={course.code} {...course} />
+    ))}
+  </div>
+);
+
+// Data
+const tabs: CourseTab[] = [
+  { key: 'introCS', label: 'Intro to CS' },
+  { key: 'coreProgramming', label: 'Core Programming' },
+  { key: 'webDev', label: 'Web Development' },
+  { key: 'dataScience', label: 'Data Science' },
+];
+
+const courseSections: CourseSections = {
+  introCS: [
+    {
+      code: 'CS101',
+      title: 'Introduction to Computer Science',
+      description: 'Learn the fundamentals of computer science and programming concepts.',
+      level: 'Beginner',
+      duration: '6 weeks',
+    },
+    // Add more courses...
+  ],
+  coreProgramming: [
+    {
+      code: 'CP201',
+      title: 'Fundamentals of Programming',
+      description: 'Master programming fundamentals with hands-on projects and exercises.',
+      level: 'Beginner',
+      duration: '8 weeks',
+    },
+    // Add more courses...
+  ],
+  // Add more sections...
+};
+
+// Main Component
+const CoursesPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <div className="bg-white pt-24">
+        <div className="container max-w-[1500px] mx-auto px-4 px-8 sm:px-8 md:px-16 lg:px-16 lg:max-w-[1300px] max-w-screen-lg relative">
+          <div className="flex flex-col md:flex-row items-center">
+            {/* Text Content */}
+            <div className="md:w-2/3 mb-8 md:mb-0">
+              <h1 className="text-black text-4xl md:text-5xl font-bold mb-6">
+                Programming and{' '}
+                <span className="block">
+                  Computer <span className="text-blue-600">Science</span>
+                </span>
+              </h1>
+              <p className="text-gray-600 text-lg w-full pr-16">
+                Programming is a critical skill in today's digital economy, and there is a shortage of qualified developers. We offer online computer programming courses in development basics, iOS, Android, Java, JavaScript, C++, React, Python, front-end development, and full-stack development.
+              </p>
+            </div>
+
+            {/* Image */}
+            <div className="pt-24">
+              <Image 
+                src="/courses-img.svg" 
+                alt="Courses Image" 
+                width={800}
+                height={800}
+                className="w-full h-auto"
+                priority 
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    {/* Course Navigation */}
+    <div className="sticky top-0 bg-white z-10">
+      <div className="container max-w-[1500px] mx-auto px-4 sm:px-8 md:px-16 lg:px-16 lg:max-w-[1300px] max-w-screen-lg relative">
+        <div className="flex overflow-x-auto no-scrollbar">
+          <div className="flex space-x-8 py-4">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`text-base whitespace-nowrap transition-colors duration-200 ${
+                  activeTab === tab.key
+                    ? 'text-black font-semibold'
+                    : 'text-[#A0A2A4] hover:text-[#FFB21D]'
+                }`}
+              >
+                {tab.label}
+                <div
+                  className={`border-t-4 border-[#FFB21D] w-full mt-2 ${
+                    activeTab === tab.key ? 'visible' : 'invisible'
+                  }`}
+                ></div>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="border-t-4 border-black opacity-5 w-full mt-2"></div>
+      </div>
+    </div>
+
+      {/* Course Content */}
+      <div className="container py-12 max-w-[1500px] mx-auto px-4 px-8 sm:px-8 md:px-16 lg:px-16 lg:max-w-[1300px] max-w-screen-lg relative">
+        {courseSections[activeTab] ? (
+          <CourseSection courses={courseSections[activeTab]} />
+        ) : (
+          <div className="text-center py-12 text-gray-600">
+            No courses available for this section yet.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CoursesPage;
+
+

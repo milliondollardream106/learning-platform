@@ -1,0 +1,113 @@
+
+{
+  "courseCategories": {
+    "introCS": {
+
+      "courses": [
+        {
+          "id": "CS101",
+          "title": "Introduction to Computer Science",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
+          "image": "/courses/test.svg",
+          "badge": "Free!",
+          "level": "Beginner",
+          "duration": "8 weeks",
+          "prerequisites": []
+        },
+        {
+          "id": "CS102",
+          "title": "Computational Thinking",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
+          "image": "/courses/comp-thinking.svg",
+          "badge": "Free!",
+          "level": "Beginner",
+          "duration": "6 weeks",
+          "prerequisites": ["CS101"]
+        },
+        {
+          "id": "CS103",
+          "title": "Intro Digital Logic and Computer Architecture",
+          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
+          "image": "/courses/digital-logic.svg",
+          "badge": "Free!",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["CS101", "CS102"]
+        }
+      ]
+    },
+    "coreProgramming": {
+      "courses": [
+        {
+          "id": "CP101",
+          "title": "Programming Fundamentals",
+          "description": "Learn the basics of programming including variables, control structures, and functions.",
+          "image": "/courses/programming-fundamentals.jpg",
+          "badge": "Bestseller",
+          "level": "Beginner",
+          "duration": "12 weeks",
+          "prerequisites": ["CS101"]
+        },
+        {
+          "id": "CP102",
+          "title": "Object-Oriented Programming",
+          "description": "Master object-oriented programming concepts and principles.",
+          "image": "/courses/oop.jpg",
+          "badge": "Popular",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["CP101"]
+        }
+      ]
+    },
+    
+    "webDev": {
+      "courses": [
+        {
+          "id": "WD101",
+          "title": "Front-end Development Basics",
+          "description": "Learn HTML, CSS, and JavaScript fundamentals for web development.",
+          "image": "/courses/frontend-basics.jpg",
+          "badge": "New",
+          "level": "Beginner",
+          "duration": "8 weeks",
+          "prerequisites": []
+        },
+        {
+          "id": "WD102",
+          "title": "React Development",
+          "description": "Build modern web applications using React and its ecosystem.",
+          "image": "/courses/test.svg",
+          "badge": "Hot",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["WD101"]
+        }
+      ]
+    },
+    "dataScience": {
+      "courses": [
+        {
+          "id": "DS101",
+          "title": "Introduction to Data Science",
+          "description": "Learn the fundamentals of data science and analytics.",
+          "image": "/courses/data-science-intro.jpg",
+          "badge": "Trending",
+          "level": "Beginner",
+          "duration": "12 weeks",
+          "prerequisites": []
+        },
+        {
+          "id": "DS102",
+          "title": "Machine Learning Basics",
+          "description": "Introduction to machine learning algorithms and applications.",
+          "image": "/courses/ml-basics.jpg",
+          "badge": "Advanced",
+          "level": "Intermediate",
+          "duration": "14 weeks",
+          "prerequisites": ["DS101"]
+        }
+      ]
+    }
+  }
+}

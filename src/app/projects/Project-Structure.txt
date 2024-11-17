@@ -1,0 +1,64 @@
+src/
+├── app/
+│   ├── layout.tsx               # Root layout component
+│   ├── page.tsx                # Home page
+│   ├── globals.css             # Global styles
+│   │
+│   ├── basics/                 # Basic concepts
+│   │   ├── page.tsx            # Introduction to React components
+│   │   ├── jsx/               # Learning JSX
+│   │   │   └── page.tsx
+│   │   ├── props/            # Component props
+│   │   │   └── page.tsx
+│   │   └── state/            # React state management
+│   │       └── page.tsx
+│   │
+│   ├── components/            # Reusable components section
+│   │   ├── page.tsx           # Components overview
+│   │   ├── basic/            # Basic components
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   └── page.tsx
+│   │   └── advanced/         # Advanced components
+│   │       ├── Modal.tsx
+│   │       ├── Carousel.tsx
+│   │       └── page.tsx
+│   │
+│   ├── hooks/                # React hooks learning
+│   │   ├── page.tsx          # Hooks overview
+│   │   ├── useState/        # useState examples
+│   │   │   └── page.tsx
+│   │   ├── useEffect/       # useEffect examples
+│   │   │   └── page.tsx
+│   │   └── custom/          # Custom hooks
+│   │       └── page.tsx
+│   │
+│   ├── routing/              # Next.js routing concepts
+│   │   ├── page.tsx
+│   │   ├── dynamic/         # Dynamic routes
+│   │   │   ├── [id]/
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   └── nested/          # Nested routes
+│   │       └── page.tsx
+│   │
+│   ├── api/                  # API routes learning
+│   │   ├── hello/
+│   │   │   └── route.ts
+│   │   └── todos/
+│   │       └── route.ts
+│   │
+│   └── projects/            # Mini-projects to practice
+       ├── todo/             # Todo list application
+       │   └── page.tsx
+       ├── weather/          # Weather app
+       │   └── page.tsx
+       └── quiz/             # Quiz application
+           └── page.tsx
+
+└── components/              # Shared components
+    ├── Navigation.tsx
+    ├── Footer.tsx
+    └── ui/                  # UI components
+        ├── Button.tsx
+        └── Input.tsx
