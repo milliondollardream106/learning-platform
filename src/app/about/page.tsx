@@ -135,7 +135,7 @@ export default function AboutPage() {
                 <div className="flex justify-center mb-6 -mt-14">
                   <div className="bg-white rounded-full p-2">
                     <div className="bg-[#F3F4F9] rounded-full p-2">
-                      {/* Use Image component properly */}
+                    
                       <Image 
                         src={feature.iconSrc} 
                         alt={feature.altText} 

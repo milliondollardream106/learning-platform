@@ -6,7 +6,8 @@ import Link from 'next/link';
 
 interface SidebarItem {
   title: string;
-  href?: string;
+  href?: string; // If you want to link to a specific URL, use href
+  sectionId?: string; // If linking to a section on the page, use sectionId
   items?: string[];
 }
 
@@ -55,7 +56,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             rounded-r-lg
             overflow-hidden
             max-h-[80vh]
-    
             h-full
             ${isOpen ? 'w-64' : 'w-0'}
           `}
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               aria-label="Close sidebar"
             >
-              <X size={20} />
+              <X size={20}  className='text-gray-800'/>
             </button>
           </div>
 
@@ -83,9 +83,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                     ) : (
                       <ChevronRight size={16} className="mr-2 text-blue-500" />
                     )}
-                    <span className="font-medium">{section.title}</span>
+                    <span className="text-[#1A73E8] font-semibold ">{section.title}</span>
                   </button>
-                  
+
                   {expandedSections[section.id] && (
                     <div className="ml-6 mt-2 space-y-2">
                       {section.items.map((item) => (
@@ -97,8 +97,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                             >
                               {item.title}
                             </Link>
+                          ) : item.sectionId ? (
+                            // Use anchor links to navigate to sections within the page
+                            <a
+                              href={`#${item.sectionId}`}
+                              className="block p-2 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+                            >
+                              {item.title}
+                            </a>
                           ) : (
-                            <div className="p-2 text-sm text-gray-600">
+                            <div className="p-2 text-sm font-regular text-black">
                               {item.title}
                               {item.items && (
                                 <ul className="ml-4 mt-1 space-y-1">

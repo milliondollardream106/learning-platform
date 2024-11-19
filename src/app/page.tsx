@@ -1,73 +1,95 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from "next/link";
 // import Footer from '../../components/Footer';
 // import Navbar from '../../components/Navbar';
 import Testimonial from './Testimonial';
-
 
 import { 
   ChevronRight,
 } from 'lucide-react';
 
+const features = [
+  {
+    icon: <Image src="/landing/web-programming.svg" alt="Curriculum" className="w-16 h-16 mx-auto" width={60} height={60} />,
+    title: "Build a Strong Foundation",
+    description: "Start with a carefully curated curriculum that includes the best online tutorials, projects, and courses."
+  },
+  {
+    icon: <Image src="/landing/consulting.png" alt="Interviews" className="w-16 h-16 mx-auto" width={60} height={60} />,
+    title: "Prepare for Interviews",
+    description: "Tackle complex interview problems with our integrated online IDE. Our tools and resources are designed to help you practice and perfect your coding skills, giving you a competitive edge in the interview process."
+  },
+  {
+    icon: <Image src="/landing/epidemiology.png" alt="Coaching" className="w-16 h-16 mx-auto" width={100} height={100}/>,
+    title: "Advance Career Coaching",
+    description: "You're not alone in your journey. Gain valuable insights and guidance from our experienced career coaches and connect with a supportive community of beginners and seasoned developers."
+  }
+];
+
+const courses = [
+  {
+    title: "Programming",
+    description: "Learn the basics of programming including HTML, CSS, and JavaScript.",
+    bgColor: "bg-[#1A73E8]",
+    textColor: "text-white"
+  },
+  {
+    title: "Computer Architecture",
+    description: "Understand the basics of computer systems",
+    bgColor: "bg-[#F1F3F9]",
+    textColor: "text-[#1A73E8]"
+  },
+  {
+    title: "Math for CS",
+    description: "Dive into the math concepts necessary for computer science.",
+    bgColor: "bg-[#1A73E8]",
+    textColor: "text-white"
+  },
+  {
+    title: "Operating Systems",
+    description: "Learn about the core components of operating systems.",
+    bgColor: "bg-[#F1F3F9]",
+    textColor: "text-[#1A73E8]"
+  },
+  {
+    title: "Computer Networking",
+    description: "Learn the fundamentals of computer networking and its applications",
+    bgColor: "bg-[#1A73E8]",
+    textColor: "text-white"
+  },
+  {
+    title: "Databases",
+    description: "Learn about databases and how to manage data.",
+    bgColor: "bg-[#F1F3F9]",
+    textColor: "text-[#1A73E8]"
+  }
+];
+
+const why_us = [
+  { 
+    title: "Build a Strong Foundation",
+    description: "Start with a carefully curated curriculum that includes the best online tutorials, projects, and courses.",
+    iconSrc: '/landing/web-programming.svg', // Image source as a string
+    altText: 'Coaching',           // Alt text for image
+  },
+  { 
+    title: "Prepare for Interviews",
+    description: "Tackle complex interview problems with our integrated online IDE. Our tools and resources are designed to help you practice and perfect your coding skills, giving you a competitive edge in the interview process.",
+    iconSrc: '/landing/consulting.png',
+    altText: 'Coaching',
+  },
+  { 
+    title: "Advance Career Coaching",
+    description: "You're not alone in your journey. Gain valuable insights and guidance from our experienced career coaches and connect with a supportive community of beginners and seasoned developers.",
+    iconSrc: '/landing/epidemiology.png',
+    altText: 'Coaching',
+  }
+];
+
+
 const LandingPage = () => {
   
-  const features = [
-    {
-      icon: <Image src="/web-programming.png" alt="Curriculum" className="w-16 h-16 mx-auto" width={100} height={100} />,
-      title: "Build a Strong Foundation",
-      description: "Start with a carefully curated curriculum that includes the best online tutorials, projects, and courses."
-    },
-    {
-      icon: <Image src="/consulting.png" alt="Interviews" className="w-16 h-16 mx-auto" width={100} height={100} />,
-      title: "Prepare for Interviews",
-      description: "Tackle complex interview problems with our integrated online IDE. Our tools and resources are designed to help you practice and perfect your coding skills, giving you a competitive edge in the interview process."
-    },
-    {
-      icon: <Image src="/epidemiology.png" alt="Coaching" className="w-16 h-16 mx-auto" width={100} height={100}/>,
-      title: "Advance Career Coaching",
-      description: "You're not alone in your journey. Gain valuable insights and guidance from our experienced career coaches and connect with a supportive community of beginners and seasoned developers."
-    }
-  ];
-
-  const courses = [
-    {
-      title: "Programming",
-      description: "Learn the basics of programming including HTML, CSS, and JavaScript.",
-      bgColor: "bg-[#1A73E8]",
-      textColor: "text-white"
-    },
-    {
-      title: "Computer Architecture",
-      description: "Understand the basics of computer systems",
-      bgColor: "bg-[#F1F3F9]",
-      textColor: "text-[#1A73E8]"
-    },
-    {
-      title: "Math for CS",
-      description: "Dive into the math concepts necessary for computer science.",
-      bgColor: "bg-[#1A73E8]",
-      textColor: "text-white"
-    },
-    {
-      title: "Operating Systems",
-      description: "Learn about the core components of operating systems.",
-      bgColor: "bg-[#F1F3F9]",
-      textColor: "text-[#1A73E8]"
-    },
-    {
-      title: "Computer Networking",
-      description: "Learn the fundamentals of computer networking and its applications",
-      bgColor: "bg-[#1A73E8]",
-      textColor: "text-white"
-    },
-    {
-      title: "Databases",
-      description: "Learn about databases and how to manage data.",
-      bgColor: "bg-[#F1F3F9]",
-      textColor: "text-[#1A73E8]"
-    }
-  ];
-
   return (
     <div className="min-h-screen">
   
@@ -85,10 +107,12 @@ const LandingPage = () => {
               Get structured guidance from industry experts to build your career in tech.
               Learn programming, system design, and more.
             </p>
-            <button className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 flex items-center">
-              Find Courses
-              <ChevronRight className="ml-2 w-5 h-5" />
-            </button>
+            <Link href="/courses" passHref>
+              <button className="px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 flex items-center">
+                Find Courses
+                <ChevronRight className="ml-2 w-5 h-5" />
+              </button>
+            </Link>
           </div>
           <div className="relative">
             <Image
@@ -162,29 +186,67 @@ const LandingPage = () => {
      </section>
 
 
-    {/* Why Choose Us */}
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-8 md:px-16 max-w-screen-lg">
+
+      {/* Why Choose Us */}
+      {/* <section className="bg-gray-100 py-20 from-white via-gray-50 to-white">
+        <div className="container mx-auto px-8 md:px-16 max-w-screen-lg">
         <h2 className="font-outfit text-[42px] text-black font-bold text-center text-black mb-10">
-          Why Choose <span className="text-blue-500">Us</span>
-        </h2>
-        <p className="text-center text-gray-600 mb-16 max-w-2xl mx-auto">
-          code2career is an AI-powered interactive learning platform that offers a streamlined, three-step process designed to help you land a job in technology.
-        </p>
-        <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-10">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 text-center"
-            >
-              <div className="mb-6">{feature.icon}</div>
-              <h3 className="text-2xl text-black font-semibold mb-4">{feature.title}</h3>
-              <p className="text-gray-600 text-base leading-relaxed">{feature.description}</p>
-            </div>
-          ))}
+        Why Choose <span className="text-blue-600">Us</span>
+          </h2>
+          <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto leading-relaxed">
+            code2career is an AI-powered interactive learning platform that offers a streamlined, three-step process designed to help you land a job in technology.
+          </p>
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transform transition duration-300 hover:scale-105 text-center"
+              >
+                <div className="mb-4 flex justify-center">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{feature.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section> */}
+
+      <section className="bg-[#F1F3F9] py-32">
+        <div className="container max-w-[1500px] mx-auto px-8 md:px-16 max-w-screen-lg container mx-auto px-4 md:px-16 lg:max-w-[1300px] max-w-screen-lg relative">
+          <div className="text-center mb-12">
+            <h2 className="text-black text-[45px] font-bold mb-4">
+              Why Choose <span className="text-blue-600">Us</span>
+            </h2>
+            <p className="text-gray-600">
+              code2career is an AI-powered interactive learning platform that offers a streamlined, three-step process designed to help you land a job in technology.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8 pb-16">
+            {why_us.map((why_us, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg flex flex-col items-center">
+                <div className="flex justify-center mb-6 -mt-14">
+                  <div className="bg-[#F1F3F9] rounded-full p-2">
+                    <div className="bg-white rounded-full p-2">
+                    
+                      <Image 
+                        src={why_us.iconSrc} 
+                        alt={why_us.altText} 
+                        className="w-16 h-16 mx-auto" 
+                        width={100} 
+                        height={100} 
+                      />
+                    </div>
+                  </div>
+                </div>
+                <h3 className="text-black text-xl font-semibold mb-3 text-center">{why_us.title}</h3>
+                <p className="text-gray-600 text-center mb-6 text-center">{why_us.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
 
     {/* Courses Section */}
@@ -222,9 +284,11 @@ const LandingPage = () => {
           <p className="text-[#808080] mb-8 max-w-lg">
             We&apos;re trusted by thousands of people starting new careers. After in-depth training and passing our highly respected final exam for your course, you&apos;ll receive a certificate of completion! This certification will show others that you have the knowledge and skills to succeed.
           </p>
-          <button className="px-8 py-3 bg-[#1A73E8] text-white rounded-full hover:bg-[#FFB21D] font-semibold">
-            Get Started &rarr;
-          </button>
+          <Link href="/pricing" passHref>
+            <button className="px-8 py-3 bg-[#1A73E8] text-white rounded-full hover:bg-[#FFB21D] font-semibold">
+              Get Started &rarr;
+            </button>
+          </Link>
         </div>
         <div className="md:w-1/2 flex justify-center md:justify-end mt-8 md:mt-0">
           <Image 
@@ -252,9 +316,11 @@ const LandingPage = () => {
             Join thousands of students who have successfully transitioned into tech careers.
             Start your journey today with our comprehensive curriculum and expert guidance.
           </p>
-          <button className="px-8 py-3 bg-white text-blue-500 rounded-full hover:bg-[#FFB21D] font-semibold">
-            Get Started Now
-          </button>
+          <Link href="/pricing" passHref>
+            <button className="px-8 py-3 bg-white text-blue-500 rounded-full hover:bg-[#FFB21D] font-semibold">
+              Get Started Now
+            </button>
+          </Link>
         </div>
       </section>
 
