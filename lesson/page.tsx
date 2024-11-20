@@ -17,7 +17,7 @@ const cs101Sections = [
   },
 ];
 
-const CS102 = () => {
+const CS103 = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [shouldShift, setShouldShift] = useState(false);
 
@@ -183,4 +183,4 @@ const CS102 = () => {
   );
 };
 
-export default CS102;
+export default CS103;
