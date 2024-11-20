@@ -1,5 +1,62 @@
-// app/pricing/page.tsx
+// app/pricing/page.tsx"use client";
+"use client";
+import { loadStripe } from '@stripe/stripe-js';
+import { useState } from 'react';
+import { auth } from '@/config/firebase';
+import { useAuth  } from '@/hooks/useAuth';
+
+// Initialize Stripe
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
 export default function PricingPage() {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const { user, loading } = useAuth();
+
+  const handleSubscription = async () => {
+    try {
+      setIsLoading(true);
+      
+      if (!user) {
+        // Redirect to sign in if not authenticated
+        // You can customize this based on your auth flow
+        alert('Please sign in to continue');
+        return;
+      }
+
+      // Create a checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.uid,
+          email: user.email,
+          plan: 'all-access'
+        }),
+      });
+
+      const session = await response.json();
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      const { error } = await stripe!.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (error) {
+        console.error('Stripe error:', error);
+        alert('Payment failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
     return (
       <div className="min-h-screen bg-white">
         {/* Pricing Header */}
