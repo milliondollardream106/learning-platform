@@ -2,12 +2,11 @@
 {
   "courseCategories": {
     "introCS": {
-
       "courses": [
         {
           "id": "CS101",
           "title": "Introduction to Computer Science",
-          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
+          "description": "Explore the fundamental concepts of computer science, including problem-solving techniques, basic programming concepts, and an overview of computer systems. Perfect starting point for beginners in tech.",
           "image": "/courses/test.svg",
           "badge": "Free!",
           "level": "Beginner",
@@ -17,7 +16,7 @@
         {
           "id": "CS102",
           "title": "Computational Thinking",
-          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
+          "description": "Develop essential problem-solving skills through computational thinking. Learn decomposition, pattern recognition, abstraction, and algorithm design principles.",
           "image": "/courses/comp-thinking.svg",
           "badge": "Free!",
           "level": "Beginner",
@@ -27,7 +26,7 @@
         {
           "id": "CS103",
           "title": "Intro Digital Logic and Computer Architecture",
-          "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
+          "description": "Understand how computers work at the hardware level. Study digital logic gates, binary systems, processor architecture, and basic computer organization principles.",
           "image": "/courses/digital-logic.svg",
           "badge": "Free!",
           "level": "Intermediate",
@@ -36,76 +35,305 @@
         }
       ]
     },
+
     "coreProgramming": {
       "courses": [
         {
-          "id": "CP101",
+          "id": "CS201",
           "title": "Programming Fundamentals",
-          "description": "Learn the basics of programming including variables, control structures, and functions.",
-          "image": "/courses/programming-fundamentals.jpg",
+          "description": "Master core programming concepts including variables, data types, control structures, functions, and basic problem-solving techniques. Build a strong foundation for your programming journey.",
+          "image": "/courses/programming-fundamentals.svg",
           "badge": "Bestseller",
           "level": "Beginner",
           "duration": "12 weeks",
           "prerequisites": ["CS101"]
         },
         {
-          "id": "CP102",
+          "id": "CS202",
           "title": "Object-Oriented Programming",
-          "description": "Master object-oriented programming concepts and principles.",
-          "image": "/courses/oop.jpg",
+          "description": "Learn essential OOP concepts including classes, objects, inheritance, polymorphism, and encapsulation. Practice designing and implementing object-oriented solutions to real-world problems.",
+          "image": "/courses/oop.svg",
           "badge": "Popular",
           "level": "Intermediate",
           "duration": "10 weeks",
-          "prerequisites": ["CP101"]
+          "prerequisites": ["CS101"]
+        },
+        {
+          "id": "CS203",
+          "title": "Intro to Data Structures and Algorithms",
+          "description": "Study fundamental data structures (arrays, linked lists, trees, graphs) and algorithms (sorting, searching, traversal). Learn algorithm analysis and optimization techniques.",
+          "image": "/courses/dsa.svg",
+          "badge": "Popular",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["CS101"]
+        },
+        {
+          "id": "CS204",
+          "title": "Software Design and Architecture",
+          "description": "Explore software design patterns, architectural principles, and best practices for building scalable applications. Learn system design, modularity, and code organization.",
+          "image": "/courses/architecture.svg",
+          "badge": "Popular",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["CS101"]
+        },
+        {
+          "id": "CS205",
+          "title": "Web Development Fundamentals",
+          "description": "Learn essential web technologies including HTML, CSS, and JavaScript. Build responsive websites and understand modern web development principles and practices.",
+          "image": "/courses/web-dev.svg",
+          "badge": "Popular",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["CS101"]
+        },
+        {
+          "id": "CS206",
+          "title": "Mobile App Development",
+          "description": "Master mobile app development fundamentals, including UI design, app architecture, and platform-specific features. Build real-world mobile applications for iOS and Android.",
+          "image": "/courses/mobile-dev.svg",
+          "badge": "Popular",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["CS101"]
         }
       ]
     },
-    
-    "webDev": {
+
+    "coreMath": {
       "courses": [
         {
-          "id": "WD101",
-          "title": "Front-end Development Basics",
-          "description": "Learn HTML, CSS, and JavaScript fundamentals for web development.",
-          "image": "/courses/frontend-basics.jpg",
+          "id": "Math301",
+          "title": "Discrete Mathematics",
+          "description": "Study fundamental mathematical structures for computer science, including logic, set theory, relations, functions, combinatorics, and graph theory. Essential for algorithm analysis and programming.",
+          "image": "/courses/discrete-math.svg",
           "badge": "New",
           "level": "Beginner",
           "duration": "8 weeks",
           "prerequisites": []
         },
         {
-          "id": "WD102",
-          "title": "React Development",
-          "description": "Build modern web applications using React and its ecosystem.",
-          "image": "/courses/test.svg",
+          "id": "Math302",
+          "title": "Linear Algebra for CS",
+          "description": "Master essential linear algebra concepts for computer science, including vectors, matrices, linear transformations, and eigenvalues. Applications in computer graphics, machine learning, and optimization.",
+          "image": "/courses/linear-algebra.svg",
           "badge": "Hot",
           "level": "Intermediate",
           "duration": "10 weeks",
-          "prerequisites": ["WD101"]
+          "prerequisites": ["Math301"]
+        },
+        {
+          "id": "Math303",
+          "title": "Probability and Statistics",
+          "description": "Learn probability theory, statistical inference, and data analysis techniques crucial for computer science. Topics include random variables, distributions, hypothesis testing, and statistical modeling.",
+          "image": "/courses/statistics.svg",
+          "badge": "New",
+          "level": "Beginner",
+          "duration": "8 weeks",
+          "prerequisites": ["Math301"]
+        },
+        {
+          "id": "Math304",
+          "title": "Calculus for Computer Science",
+          "description": "Study differential and integral calculus with computer science applications. Focus on optimization, numerical methods, and mathematical modeling for algorithms and machine learning.",
+          "image": "/courses/calculus.svg",
+          "badge": "Hot",
+          "level": "Intermediate",
+          "duration": "10 weeks",
+          "prerequisites": ["Math301", "Math302"]
         }
       ]
     },
-    "dataScience": {
+  
+    "coreSystems": {
       "courses": [
         {
-          "id": "DS101",
-          "title": "Introduction to Data Science",
-          "description": "Learn the fundamentals of data science and analytics.",
-          "image": "/courses/data-science-intro.jpg",
-          "badge": "Trending",
-          "level": "Beginner",
+          "id": "CS401",
+          "title": "Operating Systems Principles",
+          "description": "Explore core operating system concepts including process management, memory management, file systems, and scheduling algorithms. Learn about synchronization, deadlocks, and system security fundamentals.",
+          "image": "/courses/operating-systems.svg",
+          "badge": "New",
+          "level": "Advanced",
           "duration": "12 weeks",
-          "prerequisites": []
+          "prerequisites": ["CS103", "CS101"]
         },
         {
-          "id": "DS102",
-          "title": "Machine Learning Basics",
-          "description": "Introduction to machine learning algorithms and applications.",
-          "image": "/courses/ml-basics.jpg",
+          "id": "CS402",
+          "title": "Computer Networks",
+          "description": "Study computer networking fundamentals, protocols, and architectures. Cover TCS/IP, routing, network security, and socket programming. Hands-on experience with network tools and protocol implementation.",
+          "image": "/courses/networks.svg",
+          "badge": "Hot",
+          "level": "Advanced",
+          "duration": "10 weeks",
+          "prerequisites": ["CS401"]
+        },
+        {
+          "id": "CS403",
+          "title": "Database Systems",
+          "description": "Master database design principles, SQL, normalization, and transaction management. Learn about query optimization, concurrency control, and modern NoSQL systems. Build robust data-driven applications.",
+          "image": "/courses/database.svg",
+          "badge": "New",
+          "level": "Advanced",
+          "duration": "10 weeks",
+          "prerequisites": ["CS102", "Math301"]
+        },
+        {
+          "id": "CS404",
+          "title": "Cloud Computing and Distributed Systems",
+          "description": "Explore distributed system architectures, cloud services, and scalability principles. Learn about containerization, microservices, fault tolerance, and distributed data processing frameworks.",
+          "image": "/courses/cloud-computing.svg",
+          "badge": "Hot",
+          "level": "Advanced",
+          "duration": "12 weeks",
+          "prerequisites": ["CS402", "CS403"]
+        }
+      ]
+    },
+
+    
+    "coreTheory": {
+      "courses": [
+        {
+          "id": "CS501",
+          "title": "Theory of Computation",
+          "description": "Study fundamental theoretical concepts including automata theory, formal languages, Turing machines, computability, and complexity theory. Explore the limits of what computers can and cannot compute.",
+          "image": "/courses/theory-computation.svg",
+          "badge": "Trending",
+          "level": "Advanced",
+          "duration": "12 weeks",
+          "prerequisites": ["Math301", "CS103"]
+        },
+        {
+          "id": "CS502",
+          "title": "Advanced Algorithms",
+          "description": "Deep dive into advanced algorithm design and analysis, including approximation algorithms, randomized algorithms, network flows, and NP-completeness. Study optimization techniques and complexity analysis.",
+          "image": "/courses/advanced-algorithms.svg",
           "badge": "Advanced",
-          "level": "Intermediate",
+          "level": "Advanced",
           "duration": "14 weeks",
-          "prerequisites": ["DS101"]
+          "prerequisites": ["CS103", "Math301", "Math302"]
+        },
+        {
+          "id": "CS503",
+          "title": "Cryptography and Information Security",
+          "description": "Master modern cryptographic algorithms, protocols, and security principles. Study public-key cryptography, digital signatures, secure communications, and blockchain fundamentals. Includes hands-on security implementations.",
+          "image": "/courses/cryptography.svg",
+          "badge": "Advanced",
+          "level": "Advanced",
+          "duration": "14 weeks",
+          "prerequisites": ["Math301", "CS502"]
+        }
+      ]
+    },
+
+    "coreApplications": {
+      "courses": [
+        {
+          "id": "CS601",
+          "title": "Artificial Intelligence and Machine Learning",
+          "description": "Comprehensive study of AI/ML fundamentals including supervised/unsupervised learning, neural networks, deep learning, and natural language processing. Implement and train models using modern frameworks.",
+          "image": "/courses/ai-ml.svg",
+          "badge": "Trending",
+          "level": "Advanced",
+          "duration": "14 weeks",
+          "prerequisites": ["Math302", "Math303", "CS502"]
+        },
+        {
+          "id": "CS602",
+          "title": "Data Science and Analytics",
+          "description": "Master data analysis techniques, statistical methods, data visualization, and predictive modeling. Learn big data processing, data mining, and practical applications using real-world datasets.",
+          "image": "/courses/data-science.svg",
+          "badge": "Advanced",
+          "level": "Advanced",
+          "duration": "14 weeks",
+          "prerequisites": ["Math303", "CS403", "CS103"]
+        },
+        {
+          "id": "CS603",
+          "title": "Computer Graphics and Visualization",
+          "description": "Study 2D/3D graphics programming, rendering algorithms, geometric modeling, and visualization techniques. Implement graphics pipelines and interactive visualization systems using modern APIs.",
+          "image": "/courses/graphics.svg",
+          "badge": "Specialized",
+          "level": "Advanced",
+          "duration": "12 weeks",
+          "prerequisites": ["Math302", "CS102", "CS502"]
+        },
+        {
+          "id": "CS604",
+          "title": "Software Engineering Practices",
+          "description": "Advanced software development methodologies, project management, testing strategies, and DevOps practices. Focus on large-scale system design, agile methods, and continuous integration/deployment.",
+          "image": "/courses/software-engineering.svg",
+          "badge": "Essential",
+          "level": "Advanced",
+          "duration": "14 weeks",
+          "prerequisites": ["CS104", "CS404", "CS403"]
+        },
+        {
+          "id": "CS605",
+          "title": "Fundamentals of Cybersecurity",
+          "description": "Comprehensive coverage of cybersecurity principles, threat analysis, secure system design, and ethical hacking. Study network security, malware analysis, and incident response techniques.",
+          "image": "/courses/cybersecurity.svg",
+          "badge": "Critical",
+          "level": "Advanced",
+          "duration": "12 weeks",
+          "prerequisites": ["CS402", "CS503", "CS401"]
+        }
+      ]
+    },
+
+    
+    "advancedCS": {
+        "courses": [
+        {
+          "id": "CS701",
+          "title": "Parallel, Concurrent, and Distributed Programming",
+          "description": "Advanced study of parallel programming paradigms, concurrent algorithm design, and distributed systems implementation. Cover multi-threading, synchronization, distributed algorithms, and parallel performance optimization.",
+          "image": "/courses/parallel-programming.svg",
+          "badge": "Advanced",
+          "level": "Graduate",
+          "duration": "14 weeks",
+          "prerequisites": ["CS401", "CS404", "CS502"]
+        },
+        {
+          "id": "CS702",
+          "title": "Compilers",
+          "description": "In-depth study of compiler design and implementation. Topics include lexical analysis, parsing, semantic analysis, intermediate code generation, optimization techniques, and target code generation.",
+          "image": "/courses/compilers.svg",
+          "badge": "Specialized",
+          "level": "Graduate",
+          "duration": "14 weeks",
+          "prerequisites": ["CS501", "CS502", "CS401"]
+        },
+        {
+          "id": "CS703",
+          "title": "Introduction to Formal Verification",
+          "description": "Study of mathematical techniques for verifying correctness of hardware/software systems. Topics include model checking, theorem proving, static analysis, and formal specification languages.",
+          "image": "/courses/formal-verification.svg",
+          "badge": "Research",
+          "level": "Graduate",
+          "duration": "12 weeks",
+          "prerequisites": ["CS501", "CS503", "Math301"]
+        },
+        {
+          "id": "CS704",
+          "title": "Quantum Computing",
+          "description": "Introduction to quantum computing principles, quantum algorithms, and quantum information theory. Study quantum gates, circuits, error correction, and practical applications in cryptography and optimization.",
+          "image": "/courses/quantum-computing.svg",
+          "badge": "Cutting Edge",
+          "level": "Graduate",
+          "duration": "14 weeks",
+          "prerequisites": ["Math302", "CS501", "CS502"]
+        },
+        {
+          "id": "CS705",
+          "title": "Robotics",
+          "description": "Comprehensive study of robotics including kinematics, dynamics, control theory, sensor integration, and AI applications. Hands-on experience with robot programming and system design.",
+          "image": "/courses/robotics.svg",
+          "badge": "Innovation",
+          "level": "Graduate",
+          "duration": "14 weeks",
+          "prerequisites": ["CS601", "Math302", "Math304"]
         }
       ]
     }

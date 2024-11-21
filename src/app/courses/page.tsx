@@ -26,8 +26,11 @@ type CourseCategory = {
 type CourseCategories = {
   introCS: CourseCategory;
   coreProgramming: CourseCategory;
-  webDev: CourseCategory;
-  dataScience: CourseCategory;
+  coreMath: CourseCategory;
+  coreSystems: CourseCategory;
+  coreTheory: CourseCategory;
+  coreApplications: CourseCategory;
+  advancedCS: CourseCategory;
 };
 
 type CourseData = {
@@ -43,8 +46,11 @@ type CourseTab = {
 const tabs: CourseTab[] = [
   { key: 'introCS', label: 'Intro CS' },
   { key: 'coreProgramming', label: 'Core Programming' },
-  { key: 'webDev', label: 'Web Development' },
-  { key: 'dataScience', label: 'Data Science' },
+  { key: 'coreMath', label: 'Core Mathematics' },
+  { key: 'coreSystems', label: 'Core Systems' },
+  { key: 'coreTheory', label: 'Core Theory' },
+  { key: 'coreApplications', label: 'Core Applications' },
+  { key: 'advancedCS', label: 'Advanced CS' },
 ];
 
 // Course Card Component
@@ -57,7 +63,7 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
         <Image
           src={course.image}
           alt={course.title}
-          className="w-full h-full object-cover rounded-lg"
+          className="w-full h-full object-cover rounded-l"
           width={500}
           height={500}
         />
@@ -68,7 +74,7 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
         )}
       </div>
 
-      <div className="px-3 pb-3 pt-2 flex flex-col flex-grow">
+      <div className=" px-3 pb-3 pt-2 flex flex-col flex-grow">
         <div className="flex items-center gap-3 mb-3">
           <span className="bg-blue-50 text-[#1A73E8] px-3 py-2 rounded text-xs font-bold">
             {course.id}
@@ -146,7 +152,7 @@ const CoursesPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <div className="bg-white pt-24">
+      <div className=" pb-12 bg-white pt-24">
         <div className="container max-w-[1500px] mx-auto px-4 px-8 sm:px-8 md:px-16 lg:px-16 lg:max-w-[1300px] max-w-screen-lg relative">
           <div className="flex flex-col md:flex-row items-center">
             {/* Text Content */}
