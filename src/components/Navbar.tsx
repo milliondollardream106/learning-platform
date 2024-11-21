@@ -1,75 +1,40 @@
-
-// root/components/Navbar.tsx
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from 'lucide-react';
-import { auth } from '@/config/firebase';
-import { 
-  signInWithPopup, 
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signOut,
-  User 
-} from 'firebase/auth';
+import { Menu, X } from 'lucide-react'; // Import icons for mobile menu
+import { auth, signOut } from '@/config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null); // Store user state
+  const [timer, setTimer] = useState<any>(null); // Store timeout ID
 
+  const LOGOUTTIME = 60 * 60 * 1000; // 30 minutes
+
+  // Check if user is logged in
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user); // Update user state when auth state changes
+      if (user) {
+        // Automatically sign out after 1 hour (3600000 ms)
+        const logoutTimer = setTimeout(() => {
+          signOut(auth);
+        }, LOGOUTTIME); // You can change this time
+        setTimer(logoutTimer); // Store timer ID to clear it later
+
+        return () => clearTimeout(logoutTimer); // Clean up timer on unmount
+      }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const handleAuth = async () => {
-    try {
-      if (!user) {
-        const provider = new GoogleAuthProvider();
-        // Log the auth state
-        console.log('Initiating sign in...');
-        
-        // Configure Google sign-in
-        provider.setCustomParameters({
-          prompt: 'select_account'
-        });
-        
-        const result = await signInWithPopup(auth, provider);
-        console.log('Sign in successful:', result.user.email);
-      } else {
-        await signOut(auth);
-        console.log('Sign out successful');
-      }
-    } catch (error: any) {
-      console.error('Auth error:', error);
-      
-      // Detailed error handling
-      switch (error.code) {
-        case 'auth/configuration-not-found':
-          console.error('Firebase configuration error. Check Firebase Console setup.');
-          alert('Authentication system is not properly configured. Please contact support.');
-          break;
-        case 'auth/popup-blocked':
-          alert('Please enable popups for this website to sign in.');
-          break;
-        case 'auth/popup-closed-by-user':
-          console.log('Sign-in popup closed by user.');
-          break;
-        case 'auth/cancelled-popup-request':
-          console.log('Previous sign-in popup request cancelled.');
-          break;
-        case 'auth/unauthorized-domain':
-          console.error('Domain not authorized. Check Firebase Console Authorized Domains.');
-          alert('This domain is not authorized for sign-in. Please contact support.');
-          break;
-        default:
-          console.error('Unhandled auth error:', error);
-          alert('An error occurred during authentication. Please try again.');
-      }
+  const handleSignOut = () => {
+    if (user) {
+      signOut(auth);
+      clearTimeout(timer); // Clear the timeout when the user manually signs out
     }
   };
 
@@ -90,7 +55,6 @@ const Navbar = () => {
               />
             </Link>
           </div>
-
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/" className="text-[#4F5158] hover:text-blue-500 transition-colors font-medium">
@@ -109,46 +73,44 @@ const Navbar = () => {
               Contact
             </Link>
           </div>
-
-          {/* Auth Buttons */}
+          {/* Auth Buttons / User Profile */}
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Image 
-                    src={user.photoURL || '/default-avatar.png'}
-                    alt="Profile"
-                    width={32}
-                    height={32}
+              <>
+                <div className="flex items-center">
+                  <Image
+                    src={user.photoURL || "/default-avatar.png"}
+                    alt="User Avatar"
+                    width={30}
+                    height={30}
                     className="rounded-full"
                   />
-                  <span className="text-gray-700">{user.displayName}</span>
+                  {/* <p className="ml-2 text-gray-600">{user.displayName || 'User'}</p> */}
                 </div>
-                <button 
-                  onClick={handleAuth}
-                  className="px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-                >
-                  Sign out
+                <button
+                  onClick={handleSignOut}
+                  className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors font-medium"
+                  >
+                  Log out
                 </button>
-              </div>
+
+                
+              </>
             ) : (
               <>
-                <button 
-                  onClick={handleAuth} 
-                  className="px-4 py-2 text-blue-500 hover:text-blue-600 transition-colors font-medium"
-                >
-                  Log in
-                </button>
-                <button 
-                  onClick={handleAuth}
-                  className="px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-                >
-                  Sign up
-                </button>
+                <Link href="/signup">
+                  <button className="px-4 py-2 text-blue-500 hover:text-blue-600 transition-colors font-medium">
+                    Log in
+                  </button>
+                </Link>
+                <Link href="/signup">
+                  <button className="px-4 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium">
+                    Sign up
+                  </button>
+                </Link>
               </>
             )}
           </div>
-
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
@@ -164,7 +126,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden">
@@ -196,43 +157,27 @@ const Navbar = () => {
           </div>
           <div className="pt-4 pb-3 border-t border-gray-200">
             {user ? (
-              <div className="px-5 space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Image 
-                    src={user.photoURL || '/default-avatar.png'}
-                    alt="Profile"
-                    width={32}
-                    height={32}
-                    className="rounded-full"
-                  />
-                  <span className="text-gray-700">{user.displayName}</span>
-                </div>
-                <button 
-                  onClick={handleAuth}
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
+              <div className="flex items-center px-5">
+                <button
+                  onClick={handleSignOut}
+                  className="block w-full px-4 py-2 text-red-500 hover:text-red-600 transition-colors font-medium"
                 >
-                  Sign out
+                  Log out
                 </button>
               </div>
             ) : (
-              <div>
+              <>
                 <div className="flex items-center px-5">
-                  <button 
-                    onClick={handleAuth}
-                    className="block w-full px-4 py-2 text-blue-500 hover:text-blue-600 transition-colors font-medium"
-                  >
+                  <button className="block w-full px-4 py-2 text-blue-500 hover:text-blue-600 transition-colors font-medium">
                     Log in
                   </button>
                 </div>
                 <div className="mt-3 px-5">
-                  <button 
-                    onClick={handleAuth}
-                    className="block w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-                  >
+                  <button className="block w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium">
                     Sign up
                   </button>
                 </div>
-              </div>
+              </>
             )}
           </div>
         </div>
@@ -240,5 +185,4 @@ const Navbar = () => {
     </nav>
   );
 };
-
 export default Navbar;

@@ -1,7 +1,7 @@
-// src/app/config/firebase.ts
+// src/config/firebase.ts
 
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
+import { getAuth, signOut, Auth } from 'firebase/auth';
 
 // Separate required and optional config
 const requiredConfig = {
@@ -46,9 +46,10 @@ try {
 
 // Initialize and export auth
 export const auth: Auth = getAuth(app);
+export { signOut }; // Export signOut function here
 
 // Log successful initialization
 console.log('Firebase initialized successfully with config:', {
   ...firebaseConfig,
-  apiKey: firebaseConfig.apiKey?.slice(0, 5) + '...' // Hide full API key in logs
+  apiKey: firebaseConfig.apiKey?.slice(0, 5) + '...', // Hide full API key in logs
 });

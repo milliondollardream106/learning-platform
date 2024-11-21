@@ -123,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({ forceLightVersion }) => {
                             <h4 className="text-[#010F1C] font-semibold mb-4">Support</h4>
                             <ul className="space-y-2 text-gray-600 text-sm">
                                 <li><Link href="/" className="hover:text-blue-500">Help Center</Link></li>
-                                <li><Link href="/TOS" className="hover:text-blue-500">Terms of Service</Link></li>
+                                <li><Link href="/terms" className="hover:text-blue-500">Terms of Service</Link></li>
                                 <li><Link href="/privacy" className="hover:text-blue-500">Privacy Policy</Link></li>
                                 <li><Link href="#" className="hover:text-blue-500">FAQ</Link></li>
                             </ul>

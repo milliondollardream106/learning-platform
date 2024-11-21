@@ -1,160 +1,218 @@
-// app/pricing/page.tsx"use client";
 "use client";
-import { loadStripe } from '@stripe/stripe-js';
-import { useState } from 'react';
-import { auth } from '@/config/firebase';
-import { useAuth  } from '@/hooks/useAuth';
 
-// Initialize Stripe
+import { useState, useEffect } from "react";
+import { Check } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { loadStripe } from "@stripe/stripe-js";
+import { useAuth } from "@/hooks/useAuth";
+
+// Initialize Stripe outside component to avoid recreation
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-export default function PricingPage() {
+// Type definitions
+type PlanType = "monthly" | "lifetime";
 
+interface CheckoutResponse {
+  id: string;
+  url?: string;
+  error?: string;
+  code?: string;
+}
+
+export default function PricingPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
   const { user, loading } = useAuth();
 
-  const handleSubscription = async () => {
+  const handleSubscription = async (plan: PlanType) => {
     try {
-      setIsLoading(true);
+      setError(null);
       
       if (!user) {
-        // Redirect to sign in if not authenticated
-        // You can customize this based on your auth flow
-        alert('Please sign in to continue');
+        sessionStorage.setItem('intendedPlan', plan);
+        router.push('/signup?redirect=/pricing');
         return;
       }
 
-      // Create a checkout session
+      setIsLoading(true);
+
+      // Make the API call
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        body: JSON.stringify({ 
+          plan,
           userId: user.uid,
           email: user.email,
-          plan: 'all-access'
         }),
       });
 
-      const session = await response.json();
+      const data: CheckoutResponse = await response.json();
 
-      // Redirect to Stripe Checkout
+      if (!response.ok) {
+        throw new Error(data.error || 'Payment initialization failed');
+      }
+
+      // If Stripe returns a URL, use it directly
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
+
+      // Otherwise, use redirectToCheckout
       const stripe = await stripePromise;
-      const { error } = await stripe!.redirectToCheckout({
-        sessionId: session.id,
+      if (!stripe) {
+        throw new Error('Stripe failed to initialize');
+      }
+
+      const { error: stripeError } = await stripe.redirectToCheckout({
+        sessionId: data.id,
       });
 
-      if (error) {
-        console.error('Stripe error:', error);
-        alert('Payment failed. Please try again.');
+      if (stripeError) {
+        throw stripeError;
       }
+
     } catch (error) {
-      console.error('Error:', error);
-      alert('Something went wrong. Please try again.');
+      console.error('Payment Error:', error);
+      
+      const userMessage = error instanceof Error
+        ? `Payment failed: ${error.message}`
+        : 'An unexpected error occurred';
+      
+      setError(userMessage);
     } finally {
       setIsLoading(false);
     }
   };
-  
-    return (
-      <div className="min-h-screen bg-white">
-        {/* Pricing Header */}
-        <div className="py-16 text-center">
-          <h1 className="pt-20 text-black text-[40px] font-bold mb-4">
-            Our <span className="text-blue-600">Pricing</span>
-          </h1>
-          <div className="relative">
-    
+
+  // Effect to handle redirect back from login
+  useEffect(() => {
+    if (user && !loading) {
+      const intendedPlan = sessionStorage.getItem('intendedPlan') as PlanType | null;
+      if (intendedPlan) {
+        handleSubscription(intendedPlan);
+        sessionStorage.removeItem('intendedPlan');
+      }
+    }
+  }, [user, loading]);
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Pricing Header */}
+      <div className="pt-48 text-center">
+        <h1 className="text-black pt-6 text-5xl font-bold mb-4">
+          Our <span className="text-blue-600">Pricing</span>
+        </h1>
+        <p className="pb-28 max-w-2xl mx-auto text-gray-600 mt-8 px-4">
+          code2career is an AI powered interactive learning platform that offers
+          a streamlined, three-step process designed to help you land a job in
+          technology.
+        </p>
+      </div>
+
+      {/* Error Display */}
+      {error && (
+        <div className="max-w-2xl mx-auto -mt-20 mb-8">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{error}</span>
           </div>
-          <p className="max-w-2xl mx-auto text-gray-600 mt-8 px-4">
-            code2career is an AI powered interactive learning platform that offers a
-            streamlined, three-step process designed to help you land a job in technology.
-          </p>
         </div>
-  
-        {/* Pricing Card */}
-        <div className="max-w-lg mx-auto px-4 pb-20">
-          <div className="bg-blue-600 rounded-2xl p-8 text-white relative overflow-hidden">
-            {/* Popular Badge */}
-            <div className="absolute top-6 right-6">
-              {/* <span className="bg-white text-blue-600 text-sm font-medium px-3 py-1 rounded-full">
-                MOST POPULAR
-              </span> */}
-            </div>
-  
-            {/* Price */}
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-6">All-Access Pass</h2>
-              <div className="flex items-baseline justify-center">
-                <span className="text-5xl font-bold">$120</span>
-                <span className="ml-2 text-lg opacity-80">/year</span>
+      )}
+
+      {/* Pricing Cards Container */}
+      <div className="relative mx-auto px-4 pb-20">
+        {/* Background Container */}
+        <div className="absolute left-4 right-4 h-[550px] bg-gray-100 rounded-3xl transform translate-y-12 w-[900px] mx-auto" />
+
+        {/* Cards Grid */}
+        <div className="relative flex justify-center gap-8 items-start">
+          {/* Monthly Plan */}
+          <div className="w-[400px] rounded-3xl p-10 transform translate-y-0">
+            <div className="pt-14 mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 text-left">
+                Monthly Access
+              </h2>
+              <div className="mt-4 text-left flex items-baseline">
+                <span className="text-5xl font-bold text-gray-900">$15</span>
+                <span className="text-gray-600 ml-2">/month</span>
+                <span className="ml-3 text-lg line-through font-medium text-gray-400">$22/mo</span>
+                <span className="ml-2 text-lg text-green-600 font-medium">Save 32%</span>
               </div>
-              <p className="mt-2 text-sm opacity-80">Billed annually</p>
+              <p className="text-left text-gray-500 mt-2 pb-8">Billed annually</p>
             </div>
-  
-            {/* Features List */}
+
             <div className="space-y-4 mb-8">
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Complete Course Access</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Interactive Coding Environment</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Career Coaching Sessions</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Project-Based Learning</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Interview Preparation</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
-                <span>Community Access</span>
-              </div>
+              {[
+                "Complete Course Access",
+                "Interactive Coding Environment",
+                "Career Coaching Sessions",
+                "Project-Based Learning",
+                "Interview Preparation",
+              ].map((feature, index) => (
+                <div key={index} className="flex items-center space-x-3">
+                  <Check className="w-5 h-5 text-blue-600" />
+                  <span className="text-gray-700">{feature}</span>
+                </div>
+              ))}
             </div>
-  
-            {/* CTA Button */}
-            <button className="w-full bg-white text-blue-600 py-3 px-6 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200">
-              Choose plan
+
+            <button
+              onClick={() => handleSubscription("monthly")}
+              disabled={isLoading || loading}
+              className="w-full bg-blue-600 text-white py-3 px-6 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Processing..." : loading ? "Loading..." : "Choose plan"}
             </button>
-  
-            {/* Money Back Guarantee */}
-            <p className="text-center text-sm mt-6 opacity-80">
-              30-day money-back guarantee
-            </p>
           </div>
-        </div>
-  
-        {/* Additional Info */}
-        <div className="max-w-2xl mx-auto px-4 pb-20 text-center">
-          <h3 className="text-black text-xl font-semibold mb-4">
-            Everything you need to start your tech career
-          </h3>
-          <p className="text-gray-600">
-            Join thousands of students who have successfully transitioned into tech careers
-            through our comprehensive learning platform.
-          </p>
+
+          {/* Lifetime Plan */}
+          <div className="w-[400px] bg-blue-600 rounded-3xl p-10 text-white shadow-xl shadow-blue-200 transform translate-y-0">
+            <div className="pt-8 absolute -top-2 right-8">
+              <span className="font-semibold text-md bg-white text-blue-600 px-4 py-2 rounded-full">
+                MOST POPULAR
+              </span>
+            </div>
+
+            <div className="mb-6 pt-12">
+              <h2 className="pb-2 text-2xl font-bold text-left">Lifetime Access</h2>
+              <div className="mt-4 text-left flex items-baseline">
+                <span className="text-5xl font-bold">$300</span>
+                <span className="ml-2">one-time</span>
+                <span className="ml-3 text-lg line-through opacity-75">$600</span>
+                <span className="ml-2 text-sm bg-white text-blue-600 px-2 py-0.5 rounded-full font-medium">50% OFF</span>
+              </div>
+              <p className="text-left mt-2 pb-8">Pay once, own forever</p>
+            </div>
+
+            <div className="space-y-4 mb-8">
+              {[
+                "Everything in Monthly Plan",
+                "Lifetime Updates",
+                "Priority Support",
+                "Exclusive Community Access",
+                "Advanced Learning Materials",
+              ].map((feature, index) => (
+                <div key={index} className="flex items-center space-x-3">
+                  <Check className="w-5 h-5" />
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => handleSubscription("lifetime")}
+              disabled={isLoading || loading}
+              className="w-full bg-white text-blue-600 py-3 px-6 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? "Processing..." : loading ? "Loading..." : "Choose plan"}
+            </button>
+          </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
