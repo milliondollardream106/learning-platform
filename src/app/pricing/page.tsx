@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "@/hooks/useAuth";
+import Included from "./included";
 
 // Initialize Stripe outside component to avoid recreation
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -105,12 +106,11 @@ export default function PricingPage() {
       {/* Pricing Header */}
       <div className="pt-48 text-center">
         <h1 className="text-black pt-6 text-5xl font-bold mb-4">
-          Our <span className="text-blue-600">Pricing</span>
+          {/* Our <span className="text-blue-600">Pricing</span> */}
+          The <span className="text-blue-600">Smartest </span>  Investment You'll Ever Make.
         </h1>
         <p className="pb-28 max-w-2xl mx-auto text-gray-600 mt-8 px-4">
-          code2career is an AI powered interactive learning platform that offers
-          a streamlined, three-step process designed to help you land a job in
-          technology.
+        Code2Career is an AI-driven interactive learning platform dedicated to making programming and computer science education accessible to all. We're committed to continuously expanding our content offerings, ensuring that students have the resources they need to succeed in these fields
         </p>
       </div>
 
@@ -210,9 +210,16 @@ export default function PricingPage() {
             >
               {isLoading ? "Processing..." : loading ? "Loading..." : "Choose plan"}
             </button>
+
           </div>
         </div>
       </div>
+
+      {/* Included */}
+      <Included />
+
+      
+
     </div>
   );
 }
