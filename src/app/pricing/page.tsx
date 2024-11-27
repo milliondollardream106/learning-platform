@@ -1,3 +1,5 @@
+// src/app/pricing/page.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "@/hooks/useAuth";
 import Included from "./included";
+import { getFirestore, collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+
 
 // Initialize Stripe outside component to avoid recreation
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
@@ -35,48 +39,75 @@ export default function PricingPage() {
         router.push('/signup?redirect=/pricing');
         return;
       }
-
+  
+      if (!user.email) {
+        throw new Error('User email is required');
+      }
+  
       setIsLoading(true);
-
+      console.log('Starting checkout process for plan:', plan);
+  
       // Make the API call
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           plan,
           userId: user.uid,
           email: user.email,
         }),
       });
-
-      const data: CheckoutResponse = await response.json();
-
+  
+      const data = await response.json();
+      console.log('API Response:', data);
+  
       if (!response.ok) {
         throw new Error(data.error || 'Payment initialization failed');
       }
-
-      // If Stripe returns a URL, use it directly
-      if (data.url) {
-        window.location.href = data.url;
-        return;
-      }
-
-      // Otherwise, use redirectToCheckout
-      const stripe = await stripePromise;
-      if (!stripe) {
-        throw new Error('Stripe failed to initialize');
-      }
-
-      const { error: stripeError } = await stripe.redirectToCheckout({
-        sessionId: data.id,
+  
+      // Listen for the checkout session URL from Firestore
+      const db = getFirestore();
+      const checkoutSessionRef = collection(db, 'customers', user.uid, 'checkout_sessions');
+      
+      // Query the most recent session
+      const q = query(checkoutSessionRef, orderBy('created', 'desc'), limit(1));
+      console.log('Listening for checkout session updates...');
+      
+      const unsubscribe = onSnapshot(q, async (snapshot) => {
+        console.log('Got snapshot update:', snapshot.docs[0]?.data());
+        const session = snapshot.docs[0];
+        if (!session) {
+          console.log('No session document found');
+          return;
+        }
+        
+        const sessionData = session.data();
+        console.log('Session data:', sessionData);
+  
+        if (sessionData?.url) {
+          console.log('Redirecting to:', sessionData.url);
+          unsubscribe();
+          window.location.assign(sessionData.url);
+        }
+  
+        if (sessionData?.error) {
+          console.log('Session error:', sessionData.error);
+          unsubscribe();
+          throw new Error(sessionData.error.message);
+        }
+      }, (error) => {
+        console.error('Firestore listener error:', error);
       });
-
-      if (stripeError) {
-        throw stripeError;
-      }
-
+  
+      // Set timeout to prevent hanging
+      setTimeout(() => {
+        console.log('Timeout reached, cleaning up...');
+        unsubscribe();
+        throw new Error('Checkout session creation timed out');
+      }, 10000);
+  
     } catch (error) {
       console.error('Payment Error:', error);
       
@@ -90,6 +121,7 @@ export default function PricingPage() {
     }
   };
 
+
   // Effect to handle redirect back from login
   useEffect(() => {
     if (user && !loading) {
@@ -102,6 +134,7 @@ export default function PricingPage() {
   }, [user, loading]);
 
   return (
+
     <div className="min-h-screen bg-white">
       {/* Pricing Header */}
       <div className="pt-48 text-center">
@@ -217,9 +250,9 @@ export default function PricingPage() {
 
       {/* Included */}
       <Included />
-
-      
-
     </div>
+
+    
+
   );
 }

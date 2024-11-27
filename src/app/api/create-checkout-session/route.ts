@@ -1,45 +1,67 @@
 // src/app/api/create-checkout-session/route.ts
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getFirestore } from 'firebase-admin/firestore';
 
-// Validate the environment variable at startup
+// Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('STRIPE_SECRET_KEY is not defined');
 }
 
-// Initialize Stripe with the latest stable API version
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-11-20.acacia', // Use the latest stable version
+  apiVersion: '2024-11-20.acacia',
 });
 
-export async function POST(req: Request) {
-  try {
-    // Parse request body
-    const body = await req.json();
-    const { plan, userId, email } = body;
+// Define price IDs
+const PRICES = {
+  monthly: {
+    id: 'price_1QNU8gGEmyrm3vXOMhVf12Gd',
+    type: 'subscription',
+  },
+  lifetime: {
+    id: 'price_1QNUedGEmyrm3vXOQYacoWYu',
+    type: 'payment',
+  },
+} as const;
 
-    // Validate required fields
-    if (!plan || !userId || !email) {
+// Initialize Firebase Admin
+const initializeFirebaseAdmin = () => {
+  if (getApps().length === 0) {
+    const projectId = process.env.FIREBASE_PROJECT_ID;
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+    
+    if (!projectId || !clientEmail || !privateKey) {
+      throw new Error('Firebase Admin credentials are not configured');
+    }
+    
+    initializeApp({
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey: privateKey.replace(/\\n/g, '\n')
+      })
+    });
+  }
+  return getFirestore();
+};
+
+export async function POST(request: Request) {
+  try {
+    console.log('Received checkout request');
+    const { userId, email, plan } = await request.json();
+    
+    // Validate required parameters
+    if (!userId || !email || !plan) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Missing required parameters' },
         { status: 400 }
       );
     }
 
-    // Define price IDs for each plan
-    const prices = {
-      monthly: {
-        id: 'price_1QNU8gGEmyrm3vXOMhVf12Gd',
-        type: 'subscription',
-      },
-      lifetime: {
-        id: 'price_1QNUedGEmyrm3vXOQYacoWYu',
-        type: 'payment',
-      },
-    } as const;
-
-    // Validate selected plan
-    const selectedPlan = prices[plan as keyof typeof prices];
+    // Validate plan type and get plan details
+    const selectedPlan = PRICES[plan as keyof typeof PRICES];
     if (!selectedPlan) {
       return NextResponse.json(
         { error: `Invalid plan: ${plan}` },
@@ -47,13 +69,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Ensure environment variables are available
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-    if (!appUrl) {
-      throw new Error('NEXT_PUBLIC_APP_URL is not defined');
-    }
-
-    // Create Checkout Session with proper error handling
+    // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -63,8 +79,8 @@ export async function POST(req: Request) {
         },
       ],
       mode: selectedPlan.type,
-      success_url: `${appUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${appUrl}/pricing`,
+      success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/courses?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}/pricing?canceled=true`,
       customer_email: email,
       client_reference_id: userId,
       allow_promotion_codes: true,
@@ -74,36 +90,42 @@ export async function POST(req: Request) {
       },
     });
 
-    // Return successful response
-    return NextResponse.json({ 
-      id: session.id,
-      url: session.url // Include the URL for better integration
+    // Store session in Firebase
+    const db = initializeFirebaseAdmin();
+    const checkoutSessionRef = db
+      .collection('customers')
+      .doc(userId)
+      .collection('checkout_sessions')
+      .doc(session.id);
+
+    await checkoutSessionRef.set({
+      sessionId: session.id,
+      url: session.url,
+      created: new Date().toISOString(),
+      mode: selectedPlan.type,
+      metadata: {
+        userId,
+        plan
+      }
     });
 
+    // Return successful response with URL
+    return NextResponse.json({ 
+      id: session.id,
+      url: session.url
+    });
+    
   } catch (error) {
-    // Log the error for debugging
-    console.error('Stripe error:', error);
-
-    // Handle Stripe errors
+    console.error('Checkout session error:', error);
     if (error instanceof Stripe.errors.StripeError) {
       return NextResponse.json(
-        { 
-          error: error.message,
-          code: error.code 
-        },
+        { error: error.message },
         { status: error.statusCode || 500 }
       );
     }
-
-    // Handle other errors
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
     );
   }
-}
-
-// Handle OPTIONS requests for CORS
-export async function OPTIONS(request: Request) {
-  return NextResponse.json({}, { status: 200 });
 }

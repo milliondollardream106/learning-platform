@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { PremiumAccess } from '@/components/PremiumAccess';
+
 
 interface Unit {
   title: string;
@@ -59,6 +61,7 @@ const units: Unit[] = [
 
 const CoursePage = () => {
   return (
+    <PremiumAccess>
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1200px] mx-auto">
         {/* Course Header */}
@@ -131,6 +134,7 @@ const CoursePage = () => {
         </div>
       </div>
     </div>
+    </PremiumAccess>
   );
 };
 

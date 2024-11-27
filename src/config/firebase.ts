@@ -16,6 +16,7 @@ const optionalConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+
 // Check required config values
 const missingValues = Object.entries(requiredConfig).filter(([_, value]) => !value);
 if (missingValues.length > 0) {
@@ -47,6 +48,9 @@ try {
 // Initialize and export auth
 export const auth: Auth = getAuth(app);
 export { signOut }; // Export signOut function here
+export const initFirebase = () => {
+  return app;
+};
 
 // Log successful initialization
 console.log('Firebase initialized successfully with config:', {
